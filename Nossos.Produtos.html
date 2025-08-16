@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intimus - Nossos Produtos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa-claro: #ffebee;
+            --rosa-medio: #f8bbd0;
+            --rosa-escuro: #ff69b4;
+            --vinho: #6d4c5a;
+            --cinza-claro: #f5f5f5;
+            --transicao: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--rosa-claro);
+            color: var(--vinho);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--vinho);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        nav a {
+            position: relative;
+            display: inline-flex;
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--vinho);
+            transition: var(--transicao);
+        }
+        
+        nav a.fab, 
+        nav a.fas {
+            font-size: 1.5rem;
+        }
+        
+        nav a:hover {
+            color: var(--rosa-escuro);
+            transform: translateY(-2px);
+        }
+        
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background-color: var(--rosa-escuro);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        #cart-count:empty {
+            display: none;
+        }
+        
+        .products {
+            padding: 100px 0 50px;
+            background-color: white;
+        }
+        
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--vinho);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background-color: var(--cinza-claro);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: var(--transicao);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            height: 250px;
+            background-color: var(--rosa-medio);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transicao);
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            font-weight: 600;
+            color: var(--rosa-escuro);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .add-to-cart {
+            background-color: var(--rosa-escuro);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transicao);
+            font-size: 0.9rem;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--vinho);
+        }
+        
+        footer {
+            background-color: var(--vinho);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close {
+            color: var(--vinho);
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+
+        .close:hover {
+            color: var(--rosa-escuro);
+            transform: rotate(90deg);
+        }
+
+        #qrcode {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            min-height: 200px;
+            align-items: center;
+        }
+
+        .resumo-pedido {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--rosa-claro);
+            border-radius: 5px;
+        }
+
+        .resumo-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total {
+            font-weight: bold;
+            border-top: 1px solid var(--vinho);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        #refresh-qr {
+            background-color: var(--rosa-medio);
+            color: var(--vinho);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transicao);
+            font-weight: 600;
+            margin: 15px auto;
+            display: block;
+        }
+
+        #refresh-qr:hover {
+            background-color: var(--rosa-escuro);
+            color: white;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .refreshing {
+            animation: spin 0.6s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav {
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="Krislen.html" class="logo">Intimus</a>
+            <nav>
+                <a href="" id="whatsapp" class="fab fa-whatsapp"></a>
+                <a href="https://www.instagram.com/gkeee3" id="instagram-link" class="fab fa-instagram"></a>
+                <a href="#" id="cart-link" class="fas fa-shopping-bag">
+                    <span id="cart-count">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="products">
+        <div class="container">
+            <h2 class="section-title">Nossa Coleção</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="assets/produtos/conjunto-amelia.jpg" alt="Conjunto Amélia">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Conjunto Amélia</h3>
+                        <p class="product-price">R$ 149,90</p>
+                        <button class="add-to-cart" data-name="Conjunto Amélia" data-price="149.90">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="assets/Produto/Sutiã.jpeg" alt="Sutiã Sophia">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Sutiã Sophia</h3>
+                        <p class="product-price">R$ 89,90</p>
+                        <button class="add-to-cart" data-name="Sutiã Sophia" data-price="89.90">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="assets/Produto/Calcinha.jpeg" alt="Calcinha Isabella">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Calcinha Isabella</h3>
+                        <p class="product-price">R$ 59,90</p>
+                        <button class="add-to-cart" data-name="Calcinha Isabella" data-price="59.90">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="assets/produtos/body-lucia.jpg" alt="Body Lúcia">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Body Lúcia</h3>
+                        <p class="product-price">R$ 129,90</p>
+                        <button class="add-to-cart" data-name="Body Lúcia" data-price="129.90">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Finalizar Compra</h2>
+            
+            <div class="resumo-pedido" id="order-summary">
+                <h3>Resumo do Pedido</h3>
+            </div>
+            
+            <div id="qrcode-container">
+                <div id="qrcode"></div>
+                <button id="refresh-qr"><i class="fas fa-sync-alt"></i> Gerar Novo QR Code</button>
+            </div>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                Escaneie o QR Code para finalizar o pagamento
+            </p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Intimus Lingerie. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script>
+        // Carrinho de compras
+        let cart = [];
+        
+        // Atualizar contador do carrinho
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = count;
+            cartCount.style.display = count > 0 ? 'flex' : 'none';
+        }
+        
+        // Salvar carrinho no localStorage
+        function saveCartToStorage() {
+            localStorage.setItem('intimusCart', JSON.stringify(cart));
+        }
+        
+        // Carregar carrinho do localStorage
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem('intimusCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartCount();
+            }
+        }
+        
+        // Adicionar ao carrinho
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                
+                const existingItem = cart.find(item => item.name === name);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        name: name,
+                        price: price,
+                        quantity: 1
+                    });
+                }
+                
+                updateCartCount();
+                saveCartToStorage();
+                
+                // Feedback visual
+                const originalText = this.textContent;
+                this.textContent = '✓ Adicionado';
+                this.style.backgroundColor = '#4CAF50';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+        
+        // Abrir modal de pagamento
+        document.getElementById('cart-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPaymentModal();
+        });
+        
+        // Mostrar modal de pagamento
+        function showPaymentModal() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            
+            generatePixQR();
+            document.getElementById('paymentModal').style.display = 'block';
+        }
+        
+        // Gerar QR Code Pix
+        function generatePixQR() {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Atualizar resumo do pedido
+            const orderSummary = document.getElementById('order-summary');
+            orderSummary.innerHTML = '<h3>Resumo do Pedido</h3>';
+            
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'resumo-item';
+                itemDiv.innerHTML = `
+                    <span>${item.name} (${item.quantity}x)</span>
+                    <span>R$ ${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                orderSummary.appendChild(itemDiv);
+            });
+            
+            const totalDiv = document.createElement('div');
+            totalDiv.className = 'resumo-item total';
+            totalDiv.innerHTML = `
+                <span>TOTAL</span>
+                <span>R$ ${total.toFixed(2)}</span>
+            `;
+            orderSummary.appendChild(totalDiv);
+            
+            // Gerar QR Code
+            document.getElementById('qrcode').innerHTML = '';
+            
+            const pixData = {
+                chave: 'sua_chave_pix@exemplo.com',
+                beneficiario: 'Intimus Lingerie',
+                cidade: 'Sua Cidade',
+                valor: total.toFixed(2),
+                identificador: 'INTM' + Date.now()
+            };
+
+            const payload = [
+                '000201',
+                '26' + '00' + '14br.gov.bcb.pix',
+                '01' + pixData.chave.length.toString().padStart(2, '0') + pixData.chave,
+                '52040000',
+                '5303986',
+                '54' + pixData.valor.length.toString().padStart(2, '0') + pixData.valor,
+                '5802BR',
+                '59' + pixData.beneficiario.length.toString().padStart(2, '0') + pixData.beneficiario,
+                '60' + pixData.cidade.length.toString().padStart(2, '0') + pixData.cidade,
+                '62' + '05' + '03***',
+                '6304'
+            ].join('');
+
+            new QRCode(document.getElementById('qrcode'), {
+                text: payload,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+        
+        // Botão para gerar novo QR Code
+        document.getElementById('refresh-qr').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            icon.classList.add('refreshing');
+            setTimeout(() => {
+                icon.classList.remove('refreshing');
+            }, 600);
+            generatePixQR();
+        });
+        
+        // Fechar modal
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('paymentModal').style.display = 'none';
+        });
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('paymentModal')) {
+                document.getElementById('paymentModal').style.display = 'none';
+            }
+        });
+        
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', loadCartFromStorage);
+        updateCartCount();
+    </script>
+</body>
+</html>

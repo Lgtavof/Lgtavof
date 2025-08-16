@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intimus - Krislen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rosa-claro: #ffebee;
+            --rosa-medio: #f8bbd0;
+            --rosa-escuro: #ff69b4;
+            --vinho: #6d4c5a;
+            --cinza-claro: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--rosa-claro);
+            color: var(--vinho);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        #cart-link {
+            font-size: 1.2rem;
+            padding: 2px 3px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left : 20px;
+        }
+        #whatsapp {
+            font-size: 1.2rem;
+            margin-left: 20px;
+        }
+        #instagram-link {
+            font-size: 1.2rem;
+            margin-left: 20px;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        #cart-count {
+        position: absolute;
+        top: -5px;  
+        right: -20px;  
+        background-color: var(--rosa-escuro);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;  
+        font-weight: bold;
+    }
+        
+        .modal-content {
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #cart-count:empty {
+            display: none;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--vinho);
+            font-weight: 700;
+        }
+        
+        nav a {
+            position: relative;
+            display:inline-flex;
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--vinho);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--rosa-escuro);
+        }
+        
+        .hero {
+            padding: 150px 0 50px;
+            text-align: center;
+            background: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), 
+                        url('assets/bg-hero.jpg') center/cover no-repeat;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 70px;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--vinho);
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--rosa-escuro);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--vinho);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .products {
+            padding: 50px 0;
+            background-color: white;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .product-card {
+            background-color: var(--cinza-claro);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            height: 250px;
+            background-color: var(--rosa-medio);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            font-weight: 600;
+            color: var(--rosa-escuro);
+            margin-bottom: 15px;
+        }
+        
+        .add-to-cart {
+            background-color: var(--rosa-escuro);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--vinho);
+        }
+        
+        footer {
+            background-color: var(--vinho);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: var(--vinho);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: var(--rosa-escuro);
+        }
+
+        #qrcode {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .resumo-pedido {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--rosa-claro);
+            border-radius: 5px;
+        }
+
+        .resumo-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total {
+            font-weight: bold;
+            border-top: 1px solid var(--vinho);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav {
+                margin-top: 15px;
+            }
+            
+            nav a {
+                margin: 0 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+
+            .modal-content {
+                width: 90%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="Krislen.html" class="logo">Intimus</a>
+            <nav>
+                <a href="" id="whatsapp" class="fab fa-whatsapp"></a>
+                <a href="https://www.instagram.com/gkeee3" id="instagram-link" class="fab fa-instagram"></a>
+                <a href="comprar.html" id="cart-link"><i class="fas fa-shopping-bag"></i> <span id="cart-count">0</span></a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Finalizar Compra</h2>
+            
+            <div class="resumo-pedido" id="order-summary">
+                <!-- Itens serão adicionados dinamicamente aqui -->
+            </div>
+            
+            <div id="qrcode-container">
+                <div id="qrcode"></div>
+                <button id="refresh-qr"><i class="fas fa-sync-alt"></i> Gerar Novo QR Code</button>
+            </div>
+            <p id="codigoPix" style="word-break: break-all; font-size: 12px; display: none;"></p>
+            
+            <p style="text-align: center; margin-top: 20px;">
+                Escaneie o QR Code para finalizar o pagamento
+            </p>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025. Gesiele Krislen </p>
+        </div>
+    </footer>
+
+    <!-- Incluindo as bibliotecas necessárias -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pix-js@1.0.0/dist/pix.min.js"></script>
+
+    <script>
+        // Carrinho de compras
+        let cart = [];
+
+        // Salvar carrinho no localStorage
+        function saveCartToStorage() {
+            localStorage.setItem('intimusCart', JSON.stringify(cart));
+        }
+
+        // Carregar carrinho do localStorage
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem('intimusCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartCount();
+            }
+        }
+
+        // Carregar carrinho quando a página é aberta
+        document.addEventListener('DOMContentLoaded', loadCartFromStorage);
+        
+        // Atualizar contador do carrinho
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = count;
+            cartCount.style.display = count > 0 ? 'flex' : 'none';
+        }
+        
+        
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                
+                
+                const existingItem = cart.find(item => item.name === name);
+                
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    cart.push({
+                        name: name,
+                        price: price,
+                        quantity: 1
+                    });
+                }
+                
+                updateCartCount();
+                saveCartToStorage();
+                
+                
+                const originalText = this.textContent;
+                this.textContent = '✓ Adicionado';
+                this.style.backgroundColor = '#4CAF50';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.style.backgroundColor = '';
+                }, 2000);
+            });
+        });
+
+        // Função para remover item do carrinho
+        function removeItemFromCart(index) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity -= 1;
+            } else {
+                cart.splice(index, 1);
+            }
+            
+            updateCartCount();
+            saveCartToStorage();
+            showPaymentModal(); 
+        }
+        
+        // Abrir modal de pagamento quando clicar no ícone do carrinho
+        document.getElementById('cart-link').addEventListener('click', function(e) {
+
+            showPaymentModal();
+        });
+        
+        // Função para mostrar o modal de pagamento
+        function showPaymentModal() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            
+            // Gerar QR Code inicial
+            generatePixQR();
+            
+            // Mostrar modal
+            document.getElementById('paymentModal').style.display = 'block';
+        }
+        
+        // Gerar QR Code Pix que funciona com apps bancários
+        function generatePixQR() {
+            // Calcular total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Atualizar resumo do pedido
+            const orderSummary = document.getElementById('order-summary');
+            orderSummary.innerHTML = '';
+            
+            cart.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'resumo-item';
+                itemDiv.innerHTML = `
+                    <span>${item.name} (${item.quantity}x)</span>
+                    <span>R$ ${(item.price * item.quantity).toFixed(2)}</span>
+                    <button class="remove-item" data-index="${index}"><i class="fas fa-minus-circle"></i></button>
+                `;
+                orderSummary.appendChild(itemDiv);
+            });
+            
+            // Adicionar evento de clique para remover itens
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    removeItemFromCart(index);
+                });
+            });
+            
+            const totalDiv = document.createElement('div');
+            totalDiv.className = 'resumo-item total';
+            totalDiv.innerHTML = `
+                <span>TOTAL</span>
+                <span>R$ ${total.toFixed(2)}</span>
+            `;
+            orderSummary.appendChild(totalDiv);
+            
+            // Limpar QR Code anterior
+            document.getElementById('qrcode').innerHTML = '';
+            document.getElementById('codigoPix').textContent = '';
+            
+            // Configurações do PIX (substitua com seus dados reais)
+            const pixConfig = {
+                chave: 'sua_chave_pix@email.com', // Sua chave PIX (CPF, CNPJ, telefone, email ou chave aleatória)
+                beneficiario: 'Intimus Lingerie', // Nome do beneficiário
+                cidade: 'Sua Cidade', // Cidade do beneficiário
+                valor: total.toFixed(2), // Valor da transação
+                identificador: 'INTM' + Date.now(), // Identificador único da transação
+                descricao: 'Compra na Intimus Lingerie' // Descrição opcional
+            };
+            
+            // Gerar payload PIX usando a biblioteca pix-js
+            const payloadPix = Pix.generate(pixConfig);
+            
+            // Gerar QR Code
+            new QRCode(document.getElementById('qrcode'), {
+                text: payloadPix,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            // Mostrar código PIX (opcional)
+            document.getElementById('codigoPix').textContent = payloadPix;
+            
+            // Adicionar botão para copiar código PIX
+            const codigoPixElement = document.getElementById('codigoPix');
+            if (!document.getElementById('copy-pix-btn')) {
+                const copyBtn = document.createElement('button');
+                copyBtn.id = 'copy-pix-btn';
+                copyBtn.textContent = 'Copiar Código PIX';
+                copyBtn.style.margin = '10px auto';
+                copyBtn.style.display = 'block';
+                copyBtn.style.padding = '8px 15px';
+                copyBtn.style.backgroundColor = 'var(--rosa-medio)';
+                copyBtn.style.color = 'var(--vinho)';
+                copyBtn.style.border = 'none';
+                copyBtn.style.borderRadius = '5px';
+                copyBtn.style.cursor = 'pointer';
+                
+                copyBtn.addEventListener('click', function() {
+                    navigator.clipboard.writeText(payloadPix).then(() => {
+                        alert('Código PIX copiado para a área de transferência!');
+                    }).catch(err => {
+                        console.error('Erro ao copiar código PIX:', err);
+                    });
+                });
+                
+                codigoPixElement.parentNode.insertBefore(copyBtn, codigoPixElement.nextSibling);
+            }
+        }
+        
+        // Botão para gerar novo QR Code
+        document.getElementById('refresh-qr').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            icon.classList.add('refreshing');
+            setTimeout(() => {
+                icon.classList.remove('refreshing');
+            }, 600);
+            generatePixQR();
+            saveCartToStorage();
+        });
+        
+        // Fechar modal
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('paymentModal').style.display = 'none';
+        });
+        
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('paymentModal')) {
+                document.getElementById('paymentModal').style.display = 'none';
+            }
+        });
+        
+        // Limpar carrinho (opcional - pode ser chamado após pagamento confirmado)
+        function clearCart() {
+            cart = [];
+            updateCartCount();
+            localStorage.removeItem('intimusCart');
+            document.getElementById('paymentModal').style.display = 'none';
+            alert('Compra finalizada com sucesso! Obrigado por sua compra.');
+        }
+
+        // Inicializar contador do carrinho
+        updateCartCount();
+    </script>
+</body>
+</html>
